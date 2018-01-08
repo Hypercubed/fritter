@@ -4,6 +4,7 @@ const yo = require('yo-yo')
 const renderAvatar = require('./avatar')
 const renderPostActions = require('./post-actions')
 const {timestamp} = require('../lib/util')
+const marked = require('marked')
 
 // exported api
 // =
@@ -22,6 +23,10 @@ module.exports = function renderFeed () {
 // =
 
 function renderFeedItem (p) {
+  
+  const container = document.createElement('span')
+  container.innerHTML = marked(p.text)
+
   return yo`
     <div class="feed-item post" onclick=${e => app.gotoThread(p, e)}>
       ${renderAvatar(p.author)}
@@ -43,7 +48,7 @@ function renderFeedItem (p) {
           : ''}
         </div>
 
-        <p class="text">${p.text}</p>
+        <p class="text">${container}</p>
       </div>
 
       ${renderPostActions(p)}

@@ -6,6 +6,7 @@ const renderFollowButton = require('./follow-btn')
 const renderPostActions = require('./post-actions')
 const renderReply = require('./post-reply')
 const {timestamp} = require('../lib/util')
+const marked = require('marked')
 
 // exported api
 // =
@@ -15,6 +16,10 @@ module.exports = function renderThread () {
   if (!viewedPost) return ''
 
   const editingCls = app.isEditingReply ? 'editing' : ''
+
+  const container = document.createElement('span')
+  container.innerHTML = marked(viewedPost.text)
+
   return yo`
     <div class="thread">
       ${viewedPost.parent ? yo`
@@ -38,7 +43,7 @@ module.exports = function renderThread () {
           ${renderFollowButton(viewedPost.author)}
         </div>
 
-        <div class="text">${viewedPost.text}</div>
+        <div class="text">${container}</div>
 
         ${renderPostActions(viewedPost)}
       </div>
